@@ -1,0 +1,8 @@
+services:
+  api:
+    build: .
+    ports:
+      - "43177:43177"
+    environment:
+      PORT: "43177"
+    restart: unless-stopped

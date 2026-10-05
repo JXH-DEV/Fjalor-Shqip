@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fjalor Shqip API</title>
+  <meta name="description" content="API për kuptimet e fjalëve shqipe nga FJALË, Fjalorthi, Fjalorth dhe Wiktionary.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&family=Source+Code+Pro:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <div class="paper">
+    <header class="masthead">
+      <p class="eyebrow">v{{ version }}</p>
+      <h1>Fjalor Shqip</h1>
+      <p class="lede">Kërko një fjalë te FJALË, Fjalorthi, Fjalorth dhe Wiktionary. Pa çelës API. {{ rate_limit }} kërkesa në minutë për IP.</p>
+      <nav class="links">
+        <a href="/docs">Dokumentacioni</a>
+        <a href="/api/v1">Indeksi</a>
+        <a href="/api/v1/health">Shëndeti</a>
+        <a href="#use">Shembuj</a>
+      </nav>
+    </header>
+
+    <form id="search-form" class="search" role="search">
+      <label for="q">Fjala</label>
+      <div class="search-row">
+        <input id="q" name="q" type="search" placeholder="p.sh. dashuri, shtëpi, liri" autocomplete="off" spellcheck="false" autocapitalize="off">
+        <button type="submit">Kërko</button>
+      </div>
+      <ul id="suggest" class="suggest" hidden></ul>
+      <p class="hint">Provo: <button type="button" class="chip" data-word="dashuri">dashuri</button> <button type="button" class="chip" data-word="liri">liri</button> <button type="button" class="chip" data-word="shtëpi">shtëpi</button> <button type="button" class="chip" data-word="mal">mal</button></p>
+    </form>
+
+    <section id="status" class="status" aria-live="polite">
+      <p>Shkruaj një fjalë shqipe.</p>
+    </section>
+
+    <section id="results" hidden></section>
+
+    <section id="use" class="code-block">
+      <h2>Shembuj</h2>
+      <pre><code>curl -sS "{{ origin }}/api/v1/lookup?q=dashuri"</code></pre>
+      <pre><code>const res = await fetch("{{ origin }}/api/v1/lookup?q=" + encodeURIComponent("shtëpi"));
+const data = await res.json();</code></pre>
+      <pre><code>import urllib.parse, urllib.request, json
+url = "{{ origin }}/api/v1/lookup?" + urllib.parse.urlencode({"q": "liri"})
+print(json.load(urllib.request.urlopen(url))["merged"])</code></pre>
+    </section>
+
+    <aside class="side">
+      <section>
+        <h2>Fjala e ditës</h2>
+        <div id="wotd" class="panel">Duke u ngarkuar…</div>
+      </section>
+      <section>
+        <h2>Më të kërkuarat</h2>
+        <div id="trending" class="panel">Duke u ngarkuar…</div>
+      </section>
+    </aside>
+
+    <section class="sources-block">
+      <h2>Burimet</h2>
+      <ul class="source-list">
+        {% for source in sources %}
+        <li>
+          <a href="{{ source.homepage }}" rel="noreferrer">{{ source.title }}</a>
+          <span>{{ source.access }}</span>
+        </li>
+        {% endfor %}
+      </ul>
+      <p class="fineprint">Wiktionary: CC BY-SA 4.0.</p>
+    </section>
+  </div>
+  <script src="/static/app.js"></script>
+</body>
+</html>
